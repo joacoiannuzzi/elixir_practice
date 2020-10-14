@@ -1,0 +1,44 @@
+1) Implementar un proceso en Elixir (sin utilizar GenServer) 
+que permita mantener las últimas temperaturas reportadas por un grupo de sensores. 
+El proceso debe responder a los mensajes:
+
+   {:define_temp, sensor_name, sensor_temperature} -> {:ok}
+   {:query_temp, sensor_name} -> {:ok, list_of_last_temperatures}
+
+Por ejemplo: 
+
+   Mensaje enviado al proceso          ---> Respuesta
+
+   {:define_temp, "Sensor1", 22}       ---> {:ok}
+   {:query_temp, "Sensor1"}            ---> {:ok, 22}
+   {:define_temp, "Sensor1", 21.3}     ---> {:ok}
+   {:query_history, "Sensor1"}         ---> {:ok, [21.3, 22]}
+
+2) Implementar un proceso utilizando GenServer que mantenga el 
+carrito de compras de un usuario. Utilizar ‘structs’ para los items del carrito.
+
+El proceso debe tener un API para realizar las siguientes operaciones:
+
+cart = ShoppingCart.create(user_id)
+
+ShoppingCart.add_item(cart, item, quantity)
+ShoppingCart.delete_item(cart, item)
+ShoppingCart.get_items
+
+3) Programar un proceso ‘Sessions’ con GenServer que mantenga una lista 
+de usuarios conectados a un sitio web. El proceso debe tener un API para que 
+los procesos que representan a los usuarios puedan registrarse/desregistrarse:
+
+Sessions.register_user(user_name, pid)
+Sessions.deregister(user_name)
+
+Una función para notificar cualquier actividad del usuario:
+
+Sessions.user_still_active(user_name)
+
+Una función para obtener los usuarios online
+
+Sessions.get_online_users()
+
+Si un usuario no registra actividad en más de 5 minutos, su estado debe cambiar a :offline 
+y el proceso del usuario debe ser notificado con un mensaje ‘GenServer.cast’ del tipo {:status_change, :offline}
